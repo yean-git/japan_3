@@ -1,0 +1,443 @@
+/* 넷플릭스 스타일 디자인 */
+:root {
+  --netflix-black: #141414;
+  --netflix-dark: #181818;
+  --netflix-gray: #2f2f2f;
+  --netflix-card: #1f1f1f;
+  --netflix-red: #e50914;
+  --netflix-red-hover: #f40612;
+  --text-primary: #ffffff;
+  --text-secondary: #808080;
+  --correct: #46d369;
+  --wrong: #e50914;
+  --radius: 4px;
+  --radius-sm: 8px;
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Noto Sans KR", "Noto Sans JP", sans-serif;
+  background: var(--netflix-black);
+  min-height: 100vh;
+  color: var(--text-primary);
+  line-height: 1.6;
+  position: relative;
+}
+
+/* 넷플릭스 배경 그라데이션 */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(229, 9, 20, 0.15) 0%, transparent 50%),
+    linear-gradient(180deg, transparent 0%, var(--netflix-black) 30%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===== 앱 레이아웃 ===== */
+.app {
+  max-width: 600px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== 헤더 ===== */
+.header {
+  text-align: center;
+  padding: 28px 0 24px;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: 2px;
+  color: var(--netflix-red);
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* ===== 화면 ===== */
+.screen {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  animation: fadeIn 0.4s ease;
+}
+
+.screen.active {
+  display: flex;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== 시작 화면 ===== */
+.mode-select h2,
+.category-select h3 {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.mode-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.mode-btn {
+  background: var(--netflix-card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  padding: 20px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mode-btn:hover {
+  background: var(--netflix-gray);
+  border-color: var(--netflix-red);
+  transform: scale(1.02);
+  box-shadow: 0 4px 20px rgba(229, 9, 20, 0.2);
+}
+
+.mode-btn small {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.mode-icon {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+.category-select select {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--netflix-card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23808080' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+.category-select select:hover,
+.category-select select:focus {
+  border-color: var(--netflix-red);
+  outline: none;
+}
+
+/* ===== 퀴즈 화면 ===== */
+.quiz-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.quiz-question {
+  background: var(--netflix-card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  padding: 40px 24px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.word-ja {
+  font-size: 2.5rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.word-ko {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.reading {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.option-btn {
+  background: var(--netflix-card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+}
+
+.option-btn:hover:not(:disabled) {
+  background: var(--netflix-gray);
+  border-color: var(--netflix-red);
+  transform: scale(1.01);
+}
+
+.option-btn:disabled {
+  cursor: default;
+  opacity: 0.9;
+}
+
+.option-btn.correct {
+  border-color: var(--correct);
+  background: rgba(70, 211, 105, 0.15);
+}
+
+.option-btn.wrong {
+  border-color: var(--wrong);
+  background: rgba(229, 9, 20, 0.15);
+}
+
+.quiz-feedback {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  min-height: 28px;
+}
+
+.quiz-feedback.correct {
+  color: var(--correct);
+}
+
+.quiz-feedback.wrong {
+  color: var(--wrong);
+}
+
+/* ===== 플래시카드 ===== */
+.flashcard-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.nav-btn {
+  background: var(--netflix-card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 12px 20px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.nav-btn:hover {
+  background: var(--netflix-red);
+  border-color: var(--netflix-red);
+}
+
+#card-counter {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.flashcard-container {
+  perspective: 1000px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+}
+
+.flashcard {
+  width: 100%;
+  max-width: 400px;
+  height: 260px;
+  position: relative;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flashcard.flipped {
+  transform: rotateY(180deg);
+}
+
+.flashcard-front,
+.flashcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.flashcard-front {
+  background: var(--netflix-card);
+}
+
+.flashcard-back {
+  background: var(--netflix-gray);
+  border-color: var(--netflix-red);
+  transform: rotateY(180deg);
+}
+
+.flashcard-front .word-ja,
+.flashcard-back .word-ko {
+  font-size: 2rem;
+  text-align: center;
+}
+
+.flashcard-hint {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-top: 16px;
+}
+
+/* ===== 결과 화면 ===== */
+.result-content {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.result-content h2 {
+  font-size: 1.8rem;
+  margin-bottom: 24px;
+}
+
+.result-score {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--netflix-red);
+  margin-bottom: 16px;
+}
+
+.result-message {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+}
+
+/* ===== 버튼 ===== */
+.btn-primary,
+.btn-secondary {
+  padding: 14px 28px;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  border: none;
+}
+
+.btn-primary {
+  background: var(--netflix-red);
+  color: white;
+  margin-right: 12px;
+  margin-bottom: 12px;
+}
+
+.btn-primary:hover {
+  background: var(--netflix-red-hover);
+  transform: scale(1.02);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+}
+
+/* ===== 푸터 ===== */
+.footer {
+  padding: 24px 0;
+  text-align: center;
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 480px) {
+  .app {
+    padding: 16px;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .word-ja {
+    font-size: 2rem;
+  }
+
+  .flashcard {
+    height: 220px;
+  }
+
+  .result-score {
+    font-size: 2.5rem;
+  }
+}

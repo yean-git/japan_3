@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>일본어 단어 퀴즈 | 日本語 単語 クイズ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <h1>日本語 単語 クイズ</h1>
+      <p class="subtitle">일본어 단어 퀴즈로 공부해요</p>
+    </header>
+
+    <main class="main">
+      <!-- 시작 화면 -->
+      <section id="start-screen" class="screen active">
+        <div class="mode-select">
+          <h2>모드 선택</h2>
+          <div class="mode-buttons">
+            <button class="mode-btn" data-mode="quiz-ja-ko">
+              <span class="mode-icon">🇯🇵→🇰🇷</span>
+              <span>일본어 → 한국어</span>
+              <small>일본어를 보고 뜻 맞추기</small>
+            </button>
+            <button class="mode-btn" data-mode="quiz-ko-ja">
+              <span class="mode-icon">🇰🇷→🇯🇵</span>
+              <span>한국어 → 일본어</span>
+              <small>뜻을 보고 일본어 맞추기</small>
+            </button>
+            <button class="mode-btn" data-mode="flashcard">
+              <span class="mode-icon">📇</span>
+              <span>플래시카드</span>
+              <small>카드를 넘기며 암기하기</small>
+            </button>
+          </div>
+        </div>
+        <div class="category-select">
+          <h3>단어 세트</h3>
+          <select id="word-set-select">
+            <option value="basic">기초 단어 (30개)</option>
+            <option value="numbers">숫자 (20개)</option>
+            <option value="time">시간·날짜 (25개)</option>
+            <option value="verbs">동사 (25개)</option>
+            <option value="adjectives">형용사 (25개)</option>
+            <option value="all">전체 (125개)</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- 퀴즈 화면 -->
+      <section id="quiz-screen" class="screen">
+        <div class="quiz-header">
+          <span class="progress" id="quiz-progress">1 / 10</span>
+          <span class="score" id="quiz-score">정답: 0 / 0</span>
+        </div>
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </section>
+
+      <!-- 플래시카드 화면 -->
+      <section id="flashcard-screen" class="screen">
+        <div class="flashcard-nav">
+          <button class="nav-btn" id="prev-card">← 이전</button>
+          <span id="card-counter">1 / 30</span>
+          <button class="nav-btn" id="next-card">다음 →</button>
+        </div>
+        <div class="flashcard-container" id="flashcard-container">
+          <div class="flashcard" id="flashcard">
+            <div class="flashcard-front" id="flashcard-front"></div>
+            <div class="flashcard-back" id="flashcard-back"></div>
+          </div>
+        </div>
+        <p class="flashcard-hint">클릭하면 카드가 뒤집혀요</p>
+      </section>
+
+      <!-- 결과 화면 -->
+      <section id="result-screen" class="screen">
+        <div class="result-content">
+          <h2>퀴즈 완료!</h2>
+          <div class="result-score" id="result-score"></div>
+          <p class="result-message" id="result-message"></p>
+          <button class="btn-primary" id="retry-btn">다시 도전하기</button>
+          <button class="btn-secondary" id="home-btn">홈으로</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <button class="btn-secondary" id="back-btn" style="display: none;">← 뒤로</button>
+    </footer>
+  </div>
+
+  <script src="vocabulary.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
