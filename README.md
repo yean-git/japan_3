@@ -1,22 +1,24 @@
 # 일본어 단어 퀴즈
 
-## 메일 보내기
+## 사용 흐름
 
-### 1) 기본 (설정 불필요)
+1. **이름 입력** → 시험 전에 이름 작성
+2. **모드 선택** → 퀴즈 또는 플래시카드
+3. **시험 진행** → 퀴즈 모드일 때만
+4. **이메일 입력** → 시험 후 받을 메일 주소 입력
+5. **성적 메일 받기** → 실제로 해당 주소로 발송
 
-별도 설정 없이 **메일로 보내기**를 누르면 기본 메일 앱(Gmail, Outlook 등)이 열립니다.  
-전송 버튼만 누르면 해당 이메일로 결과가 발송됩니다.
+## 이메일 발송 설정 (EmailJS)
 
-### 2) EmailJS (선택 — 메일 앱 없이 바로 발송)
+실제 메일 발송을 위해 [emailjs.com](https://www.emailjs.com) 무료 가입 후 설정하세요.
 
-1. [emailjs.com](https://www.emailjs.com) 가입 (무료)
-2. **Email Services** → Add Service → Gmail 또는 원하는 서비스 연결
-3. **Email Templates** → Create Template
+1. Email Services → Gmail 등 연결
+2. Email Templates → 새 템플릿 생성
    - **To Email**: `{{to_email}}`
    - **Subject**: `{{subject}}`
    - **Content**: `{{message}}`
-4. **Account** → API Keys에서 **Public Key** 확인
-5. `config.js`에 값 입력:
+3. Account → Public Key 확인
+4. `config.js`에 입력:
 
 ```javascript
 window.EMAILJS_CONFIG = {
@@ -25,5 +27,3 @@ window.EMAILJS_CONFIG = {
   publicKey: "xxxxxxxxxxxx",
 };
 ```
-
-이후에는 메일 앱 없이 바로 발송됩니다.

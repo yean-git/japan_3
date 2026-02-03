@@ -6,19 +6,25 @@
   <title>일본어 단어 퀴즈 | 日本語 単語 クイズ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="app">
     <header class="header">
       <h1>日本語 単語 クイズ</h1>
-      <p class="subtitle">일본어 단어 퀴즈로 공부해요</p>
+      <p class="subtitle">일본어 단어로 실력을 쌓아보세요</p>
     </header>
 
     <main class="main">
       <!-- 시작 화면 -->
       <section id="start-screen" class="screen active">
+        <div class="intro-section">
+          <div class="name-input-wrap">
+            <label for="name-input">이름을 입력해주세요</label>
+            <input type="text" id="name-input" placeholder="홍길동" maxlength="20" />
+          </div>
+        </div>
         <div class="mode-select">
           <h2>모드 선택</h2>
           <div class="mode-buttons">
@@ -83,12 +89,13 @@
       <section id="result-screen" class="screen">
         <div class="result-content">
           <h2>퀴즈 완료!</h2>
+          <p class="result-name" id="result-name"></p>
           <div class="result-score" id="result-score"></div>
           <p class="result-message" id="result-message"></p>
           <div class="email-section">
-            <p class="email-label">퀴즈 결과를 메일로 받아보기</p>
-            <input type="email" id="email-input" placeholder="이메일 주소" />
-            <button class="btn-email" id="send-email-btn">메일로 보내기</button>
+            <p class="email-label">성적을 받을 이메일 주소를 입력하세요</p>
+            <input type="email" id="email-input" placeholder="example@email.com" />
+            <button class="btn-email" id="send-email-btn">성적 메일 받기</button>
             <p class="email-status" id="email-status"></p>
           </div>
           <button class="btn-primary" id="retry-btn">다시 도전하기</button>
