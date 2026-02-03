@@ -150,20 +150,10 @@ function showResult(correct, total) {
 async function sendResultEmail(to) {
   if (!lastResult) return { success: false, error: "결과가 없습니다." };
 
-  const config = window.EMAILJS_CONFIG || {};
-  const hasEmailJS = config.serviceId && config.templateId && config.publicKey;
-
-  if (!hasEmailJS || typeof emailjs === "undefined") {
-    return {
-      success: false,
-      error: "이메일 발송을 위해 config.js에 EmailJS 설정이 필요합니다. README를 참고해주세요.",
-    };
-  }
-
   const { correct, total, percent, message, userName: name } = lastResult;
   const subject = `[일본어 퀴즈] ${name || "회원"}님의 시험 결과`;
   const body = [
-    `${name || "회원"}님의 日本語 単語 クイ즈 결과`,
+    `${name || "회원"}님의 日本語 単語 クイズ 결과`,
     "",
     `이름: ${name || "-"}`,
     `점수: ${correct} / ${total} (${percent}%)`,
@@ -173,21 +163,39 @@ async function sendResultEmail(to) {
     "일본어 단어 퀴즈에서 보냈습니다.",
   ].join("\n");
 
-  try {
-    emailjs.init(config.publicKey);
-    await emailjs.send(config.serviceId, config.templateId, {
-      to_email: to,
-      to_name: to.split("@")[0],
-      subject: subject,
-      message: body,
-      user_name: name || "회원",
-      score: `${correct}/${total}`,
-      percent: `${percent}%`,
-    });
-    return { success: true };
-  } catch (err) {
-    return { success: false, error: err.text || err.message };
+  const config = window.EMAILJS_CONFIG || {};
+  const hasEmailJS = config.serviceId && config.templateId && config.publicKey;
+
+  // EmailJS 설정되어 있으면 API로 발송
+  if (hasEmailJS && typeof emailjs !== "undefined") {
+    try {
+      emailjs.init(config.publicKey);
+      await emailjs.send(config.serviceId, config.templateId, {
+        to_email: to,
+        to_name: to.split("@")[0],
+        subject: subject,
+        message: body,
+        user_name: name || "회원",
+        score: `${correct}/${total}`,
+        percent: `${percent}%`,
+      });
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: err.text || err.message };
+    }
   }
+
+  // EmailJS 설정 없으면 mailto: 링크로 메일 앱 열기
+  const mailtoUrl =
+    "mailto:" +
+    encodeURIComponent(to) +
+    "?subject=" +
+    encodeURIComponent(subject) +
+    "&body=" +
+    encodeURIComponent(body);
+  
+  window.location.href = mailtoUrl;
+  return { success: true, usedMailto: true };
 }
 
 function startFlashcard(words) {
@@ -297,7 +305,11 @@ document.getElementById("send-email-btn").addEventListener("click", async () => 
     const result = await sendResultEmail(email);
 
     if (result.success) {
-      statusEl.textContent = "✅ 메일이 발송되었습니다! 받은편지함을 확인해주세요.";
+      if (result.usedMailto) {
+        statusEl.textContent = "✅ 메일 앱이 열렸습니다. 전송 버튼을 눌러주세요.";
+      } else {
+        statusEl.textContent = "✅ 메일이 발송되었습니다! 받은편지함을 확인해주세요.";
+      }
       statusEl.className = "email-status success";
     } else {
       statusEl.textContent = "❌ " + (result.error || "전송 실패");

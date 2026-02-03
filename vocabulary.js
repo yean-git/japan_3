@@ -136,7 +136,6 @@ const VOCABULARY = {
   ],
 };
 
-// 단어 세트 가져오기
 function getWordSet(key) {
   if (key === "all") {
     return [

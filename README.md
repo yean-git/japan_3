@@ -1,5 +1,7 @@
 # 일본어 단어 퀴즈
 
+배포: [japan-3-six.vercel.app](https://japan-3-six.vercel.app)
+
 ## 사용 흐름
 
 1. **이름 입력** → 시험 전에 이름 작성

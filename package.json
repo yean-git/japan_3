@@ -1,8 +1,6 @@
 {
-  "name": "japanese-quiz",
+  "name": "japan_3",
   "version": "1.0.0",
   "description": "일본어 단어 퀴즈",
-  "dependencies": {
-    "resend": "^4.0.0"
-  }
+  "private": true
 }
