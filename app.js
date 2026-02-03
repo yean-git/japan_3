@@ -25,6 +25,7 @@ let currentMode = null;
 let currentWords = [];
 let quizState = { index: 0, correct: 0, total: 0 };
 let flashcardIndex = 0;
+let lastResult = null; // 메일 전송용
 
 // 화면 전환
 function showScreen(screenId) {
@@ -138,14 +139,67 @@ function handleAnswer(btn, correctAnswer) {
 // 결과 화면
 function showResult(correct, total) {
   const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
-  document.getElementById("result-score").textContent = `${correct} / ${total} (${percent}%)`;
-  document.getElementById("result-message").textContent =
+  const message =
     percent >= 80
       ? "훌륭해요! 잘하고 있어요! 👍"
       : percent >= 60
       ? "괜찮아요! 조금만 더 연습해보세요 💪"
       : "다시 도전해보세요! 화이팅! 🌟";
+
+  lastResult = { correct, total, percent, message };
+
+  document.getElementById("result-score").textContent = `${correct} / ${total} (${percent}%)`;
+  document.getElementById("result-message").textContent = message;
+  document.getElementById("email-status").textContent = "";
+  document.getElementById("email-input").value = "";
   showScreen("result");
+}
+
+// 메일로 결과 보내기 (EmailJS 또는 mailto 사용)
+async function sendResultEmail(to) {
+  if (!lastResult) return { success: false, error: "결과가 없습니다." };
+
+  const { correct, total, percent, message } = lastResult;
+  const subject = "일본어 퀴즈 결과";
+  const body = [
+    "日本語 単語 クイズ 결과",
+    "",
+    `정답: ${correct} / ${total} (${percent}%)`,
+    message,
+    "",
+    "---",
+    "일본어 단어 퀴즈에서 보냈습니다.",
+  ].join("\n");
+
+  const config = window.EMAILJS_CONFIG || {};
+  const hasEmailJS = config.serviceId && config.templateId && config.publicKey;
+
+  // 1) EmailJS 설정되어 있으면 API로 발송
+  if (hasEmailJS && typeof emailjs !== "undefined") {
+    try {
+      emailjs.init(config.publicKey);
+      const res = await emailjs.send(config.serviceId, config.templateId, {
+        to_email: to,
+        subject: subject,
+        message: body,
+        to_name: to.split("@")[0],
+      });
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: err.text || err.message };
+    }
+  }
+
+  // 2) mailto fallback - 메일 앱으로 열기 (설정 없어도 동작)
+  const mailtoUrl =
+    "mailto:" +
+    encodeURIComponent(to) +
+    "?subject=" +
+    encodeURIComponent(subject) +
+    "&body=" +
+    encodeURIComponent(body);
+  window.location.href = mailtoUrl;
+  return { success: true, usedMailto: true };
 }
 
 // 플래시카드 시작
@@ -229,4 +283,50 @@ retryBtn.addEventListener("click", () => {
 // 홈으로
 homeBtn.addEventListener("click", () => {
   showScreen("start");
+});
+
+// 메일 보내기 버튼
+document.getElementById("send-email-btn").addEventListener("click", async () => {
+  const input = document.getElementById("email-input");
+  const statusEl = document.getElementById("email-status");
+  const btn = document.getElementById("send-email-btn");
+  const email = input.value.trim();
+
+  if (!email) {
+    statusEl.textContent = "이메일 주소를 입력해주세요.";
+    statusEl.className = "email-status error";
+    return;
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    statusEl.textContent = "올바른 이메일 형식이 아닙니다.";
+    statusEl.className = "email-status error";
+    return;
+  }
+
+  btn.disabled = true;
+  statusEl.textContent = "전송 중...";
+  statusEl.className = "email-status";
+
+  try {
+    const result = await sendResultEmail(email);
+
+    if (result.success) {
+      if (result.usedMailto) {
+        statusEl.textContent = "✅ 메일 앱이 열렸습니다. 전송 버튼을 눌러주세요.";
+      } else {
+        statusEl.textContent = "✅ 메일이 발송되었습니다!";
+      }
+      statusEl.className = "email-status success";
+    } else {
+      statusEl.textContent = "❌ " + (result.error || "전송 실패");
+      statusEl.className = "email-status error";
+    }
+  } catch (err) {
+    statusEl.textContent = "❌ " + (err.message || "네트워크 오류");
+    statusEl.className = "email-status error";
+  }
+
+  btn.disabled = false;
 });

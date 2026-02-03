@@ -85,6 +85,12 @@
           <h2>퀴즈 완료!</h2>
           <div class="result-score" id="result-score"></div>
           <p class="result-message" id="result-message"></p>
+          <div class="email-section">
+            <p class="email-label">퀴즈 결과를 메일로 받아보기</p>
+            <input type="email" id="email-input" placeholder="이메일 주소" />
+            <button class="btn-email" id="send-email-btn">메일로 보내기</button>
+            <p class="email-status" id="email-status"></p>
+          </div>
           <button class="btn-primary" id="retry-btn">다시 도전하기</button>
           <button class="btn-secondary" id="home-btn">홈으로</button>
         </div>
@@ -96,7 +102,9 @@
     </footer>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script src="vocabulary.js"></script>
+  <script src="config.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
